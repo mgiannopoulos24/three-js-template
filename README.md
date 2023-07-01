@@ -1,2 +1,5 @@
 # three-js-template
- Simple template for three.js
+## Install instructions
+- git clone https://github.com/Alekossta/three-js-template
+- npm install
+- npx vite
