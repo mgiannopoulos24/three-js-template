@@ -1,21 +1,13 @@
 import * as THREE from 'three';
+import InputKeys from './inputKeys';
 
-///////////////////////////
-// GLOBALS
+
 let scene;
 let camera;
 let renderer;
-let clock = new THREE.Clock();
-///////////////////////////
-
-///////////////////////////
-// ADD YOUR GLOBALS HERE
 let cube;
-// ...
-///////////////////////////
+let canvas;
 
-///////////////////////////
-//  ADD YOUR CODE HERE AND CALL IT IN THE FUNCTIONS BELOW
 function createCube()
 {
   const geometry = new THREE.BoxGeometry( 1, 1, 1 );
@@ -24,16 +16,13 @@ function createCube()
   scene.add( cube );
 }
 
-function rotateCube()
+function exampleInput()
 {
-  let delta = clock.getDelta();
-  cube.rotateY(5 * delta);
+  if(InputKeys.keys["KeyW"])
+  {
+    console.log("pressing w");
+  }
 }
-// ..
-///////////////////////////
-
-///////////////////////////
-// CALL YOUR FUNCTIONS HERE
 
 // executes once at start
 function start()
@@ -43,28 +32,23 @@ function start()
 
 // executes every frame
 function tick() {
-  rotateCube();
   requestAnimationFrame(tick);
   renderer.render(scene, camera);
+  exampleInput();
 }
 
-///////////////////////////
 
-///////////////////////////
-// BOILERPLATE
-function setup()
+function setupScene()
 {
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
-  
+  canvas = document.body.appendChild(renderer.domElement);
+
   camera.position.z = 5;
 }
 
-// executing code
-setup();
+setupScene();
 start();
 tick();
-///////////////////////////
