@@ -6,3 +6,7 @@
 
 ## Features
 - simple input
+
+
+## Added features
+- While the W key is pressed the cube cycles through all the colors every 10ms
