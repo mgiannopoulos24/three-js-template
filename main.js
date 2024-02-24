@@ -1,52 +1,52 @@
 import * as THREE from 'three';
 import InputKeys from './inputKeys';
 
+let scene, camera, renderer, cube;
+let colorChangeInterval;
+let currentColor = new THREE.Color(0xffff00); // Start with yellow
 
-let scene;
-let camera;
-let renderer;
-let cube;
-let canvas;
-
-function createCube()
-{
-  const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-  const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-  cube = new THREE.Mesh( geometry, material );
-  scene.add( cube );
+function createCube() {
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
+  const material = new THREE.MeshBasicMaterial({ color: currentColor });
+  cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
 }
 
-function exampleInput()
-{
-  if(InputKeys.keys["KeyW"])
-  {
-    console.log("pressing w");
+function exampleInput() {
+  if (InputKeys.keys["KeyW"]) {
+    if (!colorChangeInterval) {
+      let hue = 0; // Start from red hue
+      colorChangeInterval = setInterval(() => {
+        hue = (hue + 1) % 360; // Increment hue and loop back to 0 at 360
+        currentColor.setHSL(hue / 360, 1, 0.5); // Full saturation, 50% lightness
+        cube.material.color.set(currentColor);
+      }, 10); // Rapidly change hue every 10ms
+    }
+  } else {
+    if (colorChangeInterval) {
+      clearInterval(colorChangeInterval);
+      colorChangeInterval = null;
+    }
   }
 }
 
-// executes once at start
-function start()
-{
-  createCube();
+function setupScene() {
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+  camera.position.z = 5;
 }
 
-// executes every frame
 function tick() {
   requestAnimationFrame(tick);
   renderer.render(scene, camera);
   exampleInput();
 }
 
-
-function setupScene()
-{
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  canvas = document.body.appendChild(renderer.domElement);
-
-  camera.position.z = 5;
+function start() {
+  createCube();
 }
 
 setupScene();
